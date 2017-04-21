@@ -1,3 +1,6 @@
+.idea
+node_modules
+
 # Created by .ignore support plugin (hsz.mobi)
 ### macOS template
 *.DS_Store

@@ -1,0 +1,24 @@
+{
+	"name": "json-rpc-dipatcher",
+	"version": "1.0.0",
+	"description": "JSON-RPC 2.0 client implementation",
+	"keywords": [
+		"json",
+		"rpc",
+		"json-rpc",
+		"jsonrpc",
+		"client"
+	],
+	"main": "index.js",
+	"scripts": {
+		"start": "node -r babel-register -r babel-polyfill index.js",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "Evgeniy Kuzorov <zhenya.kuzorov@finsight.com / kuzorov@gmail.com>",
+	"license": "ISC",
+	"dependencies": {
+		"uuid": "^3.0.1"
+	},
+	"devDependencies": {},
+	"repository": "https://github.com/kuzorov/json-rpc-dipatcher.git"
+}
