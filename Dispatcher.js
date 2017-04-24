@@ -50,8 +50,8 @@ export default class Dispatcher {
 		let adapter = transportFactory(url, options);
 
 		return adapter.request(payload).then(
-			(payload, res) => responseFactory(payload, res),
-			(payload, res) => responseFactory(payload, res)
+			res => responseFactory(payload, res),
+			res => responseFactory(payload, res)
 		);
 	}
 
@@ -67,7 +67,7 @@ export default class Dispatcher {
 		let adapter = transportFactory(url, options);
 
 		return adapter.notify(payload)
-			.catch((payload, res) => responseFactory(payload, res));
+			.catch(res => responseFactory(payload, res));
 	}
 
 	/**

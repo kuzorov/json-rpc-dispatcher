@@ -1,4 +1,4 @@
-#How to
+# How to
 
 ```js
 import Rpc from 'json-rpc-dispatcher';
@@ -17,4 +17,10 @@ let resBatch = rpc.request([req1, req2]);
  
 rpc.notify(not1);
 rpc.notify([not1, not2]);
+
+let resUrl = rpc.requestUrl(req1, 'http://api.com/api');
+let resUrlBatch = rpc.requestUrl([req1, req2], 'http://api.com/api');
+ 
+rpc.notifyUrl(not1, 'http://api.com/api');
+rpc.notifyUrl([not1, not2], 'http://api.com/api');
 ```

@@ -4,7 +4,7 @@ export default class Fetch {
 	 * @param {string} url
 	 * @param {Object} options
 	 */
-	constructor(url, options = {}) {
+	constructor(url = '/', options = {}) {
 		if (!options.method) {
 			options.method = 'POST';
 		}
