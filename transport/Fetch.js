@@ -28,7 +28,8 @@ export default class Fetch {
 	 * @param {Request|Array} payload
 	 */
 	request(payload) {
-		return fetch(this.url, { body: JSON.stringify(payload), ...this.options });
+		return fetch(this.url, { body: payload, ...this.options })
+			.then(data => data.json());
 	}
 
 	/**
@@ -37,7 +38,7 @@ export default class Fetch {
 	 * @param {Notification|Array} payload
 	 */
 	notify(payload) {
-		return fetch(this.url, { body: JSON.stringify(payload), ...this.options })
+		return fetch(this.url, { body: payload, ...this.options })
 	}
 
 	/**

@@ -3,36 +3,45 @@ import Error from './../rpc/response/Error';
 import JsonRpcError from './../rpc/response/JsonRpcError';
 
 export default function responseFactory(req, res) {
-	if (Array.isArray(res)) {
-		res = res.map(payload => getResponseObj(payload));
-		return sortRes(req, res);
-	}
+	try {
+		if (typeof res !== 'object') {
+			res = JSON.parse(res);
+		}
 
-	return getResponseObj(res);
+		if (Array.isArray(res)) {
+			res = res.map(payload => getResponseObj(payload));
+
+			return sortRes(req, res);
+		}
+
+		return getResponseObj(res);
+	} catch (e) {
+		return new JsonRpcError({ id: null, error: { code: -32603, message: 'Error while processing response', data: e } })
+	}
 }
 
 /**
  * Sort response according to batch request order
  *
- * @param {array} req
- * @param {array} res
+ * @param {Array} req
+ * @param {Array} res
  *
- * @return {array}
+ * @return {Array}
  */
 function sortRes(req, res) {
-	return req.map(el => {
-		let id = el.getId();
+	let sorted = [];
 
-		if (id === null) {
-			throw Error('Id cannot be null in butch request');
-		}
-
-		for (let i = 0; i < res.length; i++) {
-			if (res[i].getId === id) {
-				return res[i];
+	for (let i = 0; i < req.length; i++) {
+		for (let j = 0; j < res.length; j++) {
+			if (req[i] && res[j] && req[i].id == res[j].id) {
+				sorted.push(res[j]);
+				delete req[i];
+				delete res[j];
 			}
 		}
-	})
+	}
+
+	return sorted;
 }
 
 /**
@@ -42,22 +51,19 @@ function sortRes(req, res) {
  * @return {*}
  */
 function getResponseObj(res) {
-	try {
-		res = JSON.decode(res);
-
-		if (res.result) {
-			return new Success(res);
-		}
-		if (res.error) {
-			if (res.error.code > -32768 && res.error.code < -32000) {
-				return new JsonRpcError(res);
-			}
-
-			return new Error(res);
-		}
-
+	if (res.result) {
 		return new Success(res);
-	} catch (e) {
-		new JsonRpcError({ id: null, error: { code: -32603, message: 'Error while response processing' } })
 	}
+	if (res.error) {
+		if (res.error.code > -32768 && res.error.code < -32000) {
+			return new JsonRpcError(res);
+		}
+
+		return new Error(res);
+	}
+
+	return new JsonRpcError({
+		id: null,
+		error: { code: -32603, message: 'Error while processing response', data: res }
+	});
 }

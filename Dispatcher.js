@@ -1,5 +1,6 @@
 import transportFactory from './providers/transportFactory';
 import responseFactory from './providers/responseFactory';
+import toJsonRpc from './providers/toJsonRpc';
 
 export default class Dispatcher {
 	/**
@@ -21,9 +22,9 @@ export default class Dispatcher {
 	 * @return {*|Promise.<TResult>}
 	 */
 	request(payload) {
-		return this.getAdapter().request(payload).then(
-			(payload, res) => responseFactory(payload, res),
-			(payload, res) => responseFactory(payload, res)
+		return this.getAdapter().request(toJsonRpc(payload)).then(
+			res => responseFactory(payload, res),
+			res => responseFactory(payload, res)
 		);
 	}
 
@@ -33,8 +34,8 @@ export default class Dispatcher {
 	 * @param payload
 	 */
 	notify(payload) {
-		this.getAdapter().notify(payload)
-			.catch((payload, res) => responseFactory(payload, res));
+		return this.getAdapter().notify(toJsonRpc(payload))
+			.catch(res => responseFactory(payload, res));
 	}
 
 	/**

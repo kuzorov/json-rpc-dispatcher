@@ -29,6 +29,6 @@ export default class Notification {
 	 * @inheritDoc
 	 */
 	toString() {
-		this.toJsonRpc();
+		return this.toJsonRpc();
 	}
 }

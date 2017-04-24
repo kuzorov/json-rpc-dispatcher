@@ -5,7 +5,7 @@ export default class Request {
 	 * @param {object} payload
 	 */
 	constructor(payload) {
-		if (!payload.id) {
+		if (!payload.id && payload.id !== null) {
 			payload.id = uuid();
 		}
 		if (!payload.method) {
@@ -39,6 +39,6 @@ export default class Request {
 	 * @inheritDoc
 	 */
 	toString() {
-		this.toJsonRpc();
+		return this.toJsonRpc();
 	}
 }
