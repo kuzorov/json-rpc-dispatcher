@@ -1,6 +1,6 @@
 {
 	"name": "json-rpc-dispatcher",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"description": "JSON-RPC 2.0 client implementation",
 	"keywords": [
 		"json",
@@ -14,11 +14,11 @@
 		"start": "node -r babel-register -r babel-polyfill index.js",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
-	"author": "Evgeniy Kuzorov <zhenya.kuzorov@finsight.com / kuzorov@gmail.com>",
-	"license": "ISC",
+	"author": "Evgeniy Kuzorov <kuzorov@gmail.com>",
 	"dependencies": {
 		"uuid": "^3.0.1"
 	},
 	"devDependencies": {},
-	"repository": "https://github.com/kuzorov/json-rpc-dispatcher.git"
+	"repository": "https://github.com/kuzorov/json-rpc-dispatcher.git",
+  "license": "MIT"
 }
