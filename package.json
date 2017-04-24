@@ -1,5 +1,5 @@
 {
-	"name": "json-rpc-dipatcher",
+	"name": "json-rpc-dispatcher",
 	"version": "1.0.0",
 	"description": "JSON-RPC 2.0 client implementation",
 	"keywords": [
