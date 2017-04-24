@@ -1,0 +1,188 @@
+{
+  "parser": "babel-eslint",
+  "plugins": [
+    "react"
+  ],
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "ecmaFeatures": {
+    "arrowFunctions": true,
+    "blockBindings": true,
+    "classes": true,
+    "defaultParams": true,
+    "destructuring": true,
+    "forOf": true,
+    "generators": false,
+    "modules": true,
+    "objectLiteralComputedProperties": true,
+    "objectLiteralDuplicateProperties": false,
+    "objectLiteralShorthandMethods": true,
+    "objectLiteralShorthandProperties": true,
+    "spread": true,
+    "superInFunctions": true,
+    "templateStrings": true,
+    "jsx": true,
+    "promise": true
+  },
+  "globals": {
+    "Promise": true,
+    "Symbol": true
+  },
+  "rules": {
+    "comma-dangle": [
+      2,
+      "never"
+    ],
+    "no-cond-assign": 1,
+    "no-constant-condition": 1,
+    "no-control-regex": 1,
+    "no-debugger": 1,
+    "no-dupe-keys": 1,
+    "no-empty-character-class": 1,
+    "no-ex-assign": 1,
+    "no-extra-parens": [
+      2,
+      "functions"
+    ],
+    "no-extra-semi": 1,
+    "no-func-assign": 1,
+    "no-undef": 2,
+    "no-invalid-regexp": 1,
+    "no-irregular-whitespace": 1,
+    "no-negated-in-lhs": 1,
+    "no-obj-calls": 1,
+    "no-regex-spaces": 1,
+    "no-sparse-arrays": 1,
+    "no-unreachable": 1,
+    "use-isnan": 1,
+    "valid-typeof": 1,
+    "space-unary-ops": [
+      1,
+      {
+        "words": true,
+        "nonwords": false
+      }
+    ],
+    "camelcase": 1,
+    "comma-spacing": [
+      2,
+      {
+        "before": false,
+        "after": true
+      }
+    ],
+    "comma-style": [
+      2,
+      "last"
+    ],
+    "eol-last": 1,
+    "key-spacing": [
+      2,
+      {
+        "beforeColon": false,
+        "afterColon": true
+      }
+    ],
+    "max-nested-callbacks": [
+      2,
+      3
+    ],
+    "max-depth": [
+      2,
+      5
+    ],
+    "max-params": [
+      1,
+      4
+    ],
+    "complexity": [
+      2,
+      30
+    ],
+    "new-parens": 1,
+    "no-array-constructor": 1,
+    "no-mixed-spaces-and-tabs": [
+      2,
+      "smart-tabs"
+    ],
+    "no-new-object": 1,
+    "semi-spacing": 1,
+    "no-spaced-func": 1,
+    "no-trailing-spaces": 1,
+    "no-multiple-empty-lines": [
+      1,
+      {
+        "max": 2
+      }
+    ],
+    "space-before-blocks": [
+      1,
+      "always"
+    ],
+    "space-infix-ops": 1,
+    "spaced-comment": 2,
+    "object-curly-spacing": [
+      2,
+      "always"
+    ],
+    "yoda": 2,
+    "react/display-name": 1,
+    "react/jsx-boolean-value": 2,
+    "jsx-quotes": [
+      2,
+      "prefer-double"
+    ],
+    "react/jsx-curly-spacing": [
+      2,
+      "always"
+    ],
+    "react/jsx-no-undef": 2,
+    "react/jsx-uses-react": 2,
+    "react/jsx-uses-vars": 2,
+    "react/no-multi-comp": 2,
+    "react/no-unknown-property": 2,
+    "react/prop-types": 2,
+    "react/react-in-jsx-scope": 2,
+    "react/self-closing-comp": 2,
+    "react/jsx-wrap-multilines": 2,
+    // Prevent usage of .bind() in JSX props
+    // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md
+    "react/jsx-no-bind": [
+      2,
+      {
+        "ignoreRefs": true,
+        "allowArrowFunctions": true,
+        "allowBind": false
+      }
+    ],
+    // Require stateless functions when not using lifecycle methods, setState or ref
+    // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/prefer-stateless-function.md
+    "react/prefer-stateless-function": 2,
+    // Require render() methods to return something
+    // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/require-render-return.md
+    "react/require-render-return": 2,
+    // Prevent unused propType definitions
+    // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-unused-prop-types.md
+    "react/no-unused-prop-types": [
+      2,
+      {
+        "customValidators": [],
+        "skipShapeProps": true
+      }
+    ],
+    "react/sort-comp": [
+      1,
+      {
+        "order": [
+          "constructor",
+          "lifecycle",
+          "everything-else",
+          "render"
+        ]
+      }
+    ]
+  }
+}
