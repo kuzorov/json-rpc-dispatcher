@@ -42,14 +42,14 @@ export default class Dispatcher {
 	 * Request to specified url
 	 *
 	 * @param url
-	 * @param payload
+	 * @param {Array|object} payload
 	 * @param options
 	 * @return {*|Promise.<TResult>}
 	 */
 	requestUrl(payload, url, options = {}) {
 		let adapter = transportFactory(url, options);
 
-		return adapter.request(payload).then(
+		return adapter.request(toJsonRpc(payload)).then(
 			res => responseFactory(payload, res),
 			res => responseFactory(payload, res)
 		);
@@ -66,7 +66,7 @@ export default class Dispatcher {
 	notifyUrl(payload, url, options = {}) {
 		let adapter = transportFactory(url, options);
 
-		return adapter.notify(payload)
+		return adapter.notify(toJsonRpc(payload))
 			.catch(res => responseFactory(payload, res));
 	}
 

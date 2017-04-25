@@ -25,7 +25,7 @@ export default class Fetch {
 	/**
 	 * Send request to server
 	 *
-	 * @param {Request|Array} payload
+	 * @param {string} payload
 	 */
 	request(payload) {
 		return fetch(this.url, { body: payload, ...this.options })
@@ -35,7 +35,7 @@ export default class Fetch {
 	/**
 	 * Send notification to server
 	 *
-	 * @param {Notification|Array} payload
+	 * @param {string} payload
 	 */
 	notify(payload) {
 		return fetch(this.url, { body: payload, ...this.options })
