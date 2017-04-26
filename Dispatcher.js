@@ -46,7 +46,7 @@ export default class Dispatcher {
 	 * @param options
 	 * @return {*|Promise.<TResult>}
 	 */
-	requestUrl(payload, url, options = {}) {
+	static requestUrl(payload, url, options = {}) {
 		let adapter = transportFactory(url, options);
 
 		return adapter.request(toJsonRpc(payload)).then(
@@ -63,7 +63,7 @@ export default class Dispatcher {
 	 * @param options
 	 * @return {*|Promise.<TResult>}
 	 */
-	notifyUrl(payload, url, options = {}) {
+	static notifyUrl(payload, url, options = {}) {
 		let adapter = transportFactory(url, options);
 
 		return adapter.notify(toJsonRpc(payload))
