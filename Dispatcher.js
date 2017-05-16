@@ -12,7 +12,7 @@ export default class Dispatcher {
 		this.url = url;
 		this.options = options;
 
-		this.adapter = transportFactory(this.url, this.options)
+		this.adapter = transportFactory(this.url, this.options);
 	}
 
 	/**
