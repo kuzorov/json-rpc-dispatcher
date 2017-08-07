@@ -41,7 +41,7 @@ export default class Dispatcher {
 	 * @param options
 	 * @return {*|Promise.<TResult>}
 	 */
-	static requestUrl(payload, url, options = {}) {
+	requestUrl(payload, url, options = {}) {
 		let adapter = Object.assign({}, this.getAdapter()).url = url;
 
 		return adapter.request(toJsonRpc(payload)).then(
@@ -58,7 +58,7 @@ export default class Dispatcher {
 	 * @param options
 	 * @return {*|Promise.<TResult>}
 	 */
-	static notifyUrl(payload, url, options = {}) {
+	notifyUrl(payload, url, options = {}) {
 		let adapter = Object.assign({}, this.getAdapter()).url = url;
 
 		return adapter.notify(toJsonRpc(payload))

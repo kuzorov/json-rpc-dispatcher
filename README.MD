@@ -20,9 +20,9 @@ let resBatch = rpc.request([req1, req2]);
 rpc.notify(not1);
 rpc.notify([not1, not2]);
 
-let resUrl = Rpc.requestUrl(req1, 'http://api.com/api');
-let resUrlBatch = Rpc.requestUrl([req1, req2], 'http://api.com/api');
+let resUrl = rpc.requestUrl(req1, 'http://api.com/api');
+let resUrlBatch = rpc.requestUrl([req1, req2], 'http://api.com/api');
  
-Rpc.notifyUrl(not1, 'http://api.com/api');
-Rpc.notifyUrl([not1, not2], 'http://api.com/api');
+rpc.notifyUrl(not1, 'http://api.com/api');
+rpc.notifyUrl([not1, not2], 'http://api.com/api');
 ```
