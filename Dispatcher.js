@@ -1,4 +1,3 @@
-import transportFactory from './providers/transportFactory';
 import responseFactory from './providers/responseFactory';
 import toJsonRpc from './providers/toJsonRpc';
 
