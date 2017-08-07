@@ -42,7 +42,7 @@ export default class Dispatcher {
 	 * @return {*|Promise.<TResult>}
 	 */
 	requestUrl(payload, url, options = {}) {
-		let adapter = Object.assign({}, this.getAdapter()).url = url;
+		let adapter = Object.assign(Object.create(this.getAdapter()), this.getAdapter(), { url });
 
 		return adapter.request(toJsonRpc(payload)).then(
 			res => responseFactory(payload, res),
@@ -59,7 +59,7 @@ export default class Dispatcher {
 	 * @return {*|Promise.<TResult>}
 	 */
 	notifyUrl(payload, url, options = {}) {
-		let adapter = Object.assign({}, this.getAdapter()).url = url;
+		let adapter = Object.assign(Object.create(this.getAdapter()), this.getAdapter(), { url });
 
 		return adapter.notify(toJsonRpc(payload))
 			.catch(res => responseFactory(payload, res));
