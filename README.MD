@@ -4,7 +4,7 @@
 import Rpc from 'json-rpc-dispatcher';
 import { Request, Notification, Success, Error, JsonRpcError, adapters } from 'json-rpc-dispatcher';
  
-let adapter = new adapter.Fetch('http://api.com');
+let adapter = new adapters.Fetch('http://api.com');
 
 let rpc = new Rpc(adapter);
  
