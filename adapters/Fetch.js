@@ -14,7 +14,7 @@ export default class Fetch {
 		if (!options.credentials) {
 			options.credentials = 'include'
 		}
-		if (typeof options.headers !== Headers) {
+		if (!options.headers instanceof Headers) {
 			options.headers = new Headers(options.headers);
 		}
 

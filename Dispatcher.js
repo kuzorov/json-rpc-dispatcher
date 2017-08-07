@@ -5,14 +5,10 @@ import toJsonRpc from './providers/toJsonRpc';
 export default class Dispatcher {
 	/**
 	 *
-	 * @param {string} url
-	 * @param {object} options
+	 * @param {object} adapter
 	 */
-	constructor(url, options = {}) {
-		this.url = url;
-		this.options = options;
-
-		this.adapter = transportFactory(this.url, this.options);
+	constructor(adapter) {
+		this.adapter = adapter;
 	}
 
 	/**
@@ -47,7 +43,7 @@ export default class Dispatcher {
 	 * @return {*|Promise.<TResult>}
 	 */
 	static requestUrl(payload, url, options = {}) {
-		let adapter = transportFactory(url, options);
+		let adapter = Object.assign(this.getAdapter()).url = url;
 
 		return adapter.request(toJsonRpc(payload)).then(
 			res => responseFactory(payload, res),
@@ -64,7 +60,7 @@ export default class Dispatcher {
 	 * @return {*|Promise.<TResult>}
 	 */
 	static notifyUrl(payload, url, options = {}) {
-		let adapter = transportFactory(url, options);
+		let adapter = Object.assign(this.getAdapter()).url = url;
 
 		return adapter.notify(toJsonRpc(payload))
 			.catch(res => responseFactory(payload, res));
@@ -101,6 +97,22 @@ export default class Dispatcher {
 	 * @return {*}
 	 */
 	getAdapter() {
+		if (!this.adapter) {
+			throw 'Adapter is not set'
+		}
+
 		return this.adapter;
+	}
+
+	/**
+	 * Set adapter
+	 *
+	 * @param {object} adapter
+	 * @return {Dispatcher}
+	 */
+	setAdapter(adapter) {
+		this.adapter = adapter;
+
+		return this;
 	}
 }

@@ -4,6 +4,11 @@ import Notification from './rpc/request/Notification';
 import Success from './rpc/response/Success';
 import Error from './rpc/response/Error';
 import JsonRpcError from './rpc/response/JsonRpcError';
+import Fetch from './adapters/Fetch';
+
+let adapters = {
+	Fetch
+};
 
 export default Dispatcher;
-export { Request, Notification, Success, Error, JsonRpcError };
+export { Request, Notification, Success, Error, JsonRpcError, adapters };

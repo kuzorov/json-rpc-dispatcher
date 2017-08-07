@@ -2,9 +2,11 @@
 
 ```js
 import Rpc from 'json-rpc-dispatcher';
-import { Request, Notification, Success, Error, JsonRpcError } from 'json-rpc-dispatcher';
+import { Request, Notification, Success, Error, JsonRpcError, adapters } from 'json-rpc-dispatcher';
  
-let rpc = new Rpc('http://api.com');
+let adapter = new adapter.Fetch('http://api.com');
+
+let rpc = new Rpc(adapter);
  
 let req1 = new Request({ id: 1, params: { param1: 'param1', param2: 'param2' } });
 let req2 = new Request({ id: 2, params: { param1: 'param1', param2: 'param2' } });
