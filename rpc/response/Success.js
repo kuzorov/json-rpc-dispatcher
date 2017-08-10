@@ -50,4 +50,18 @@ export default class Success {
 
 		return this.result.payload;
 	}
+
+	/**
+	 * Convert to JSON-RPC compatible string
+	 */
+	toJsonRpc() {
+		return JSON.stringify({ jsonrpc: '2.0', ...this });
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	toString() {
+		return this.toJsonRpc();
+	}
 }
