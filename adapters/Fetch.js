@@ -9,13 +9,10 @@ export default class Fetch {
 			options.method = 'POST';
 		}
 		if (!options.headers) {
-			options.headers = new Headers({ 'Content-Type': 'application/json' })
+			options.headers = { 'Content-Type': 'application/json' }
 		}
 		if (!options.credentials) {
 			options.credentials = 'include'
-		}
-		if (!options.headers instanceof Headers) {
-			options.headers = new Headers(options.headers);
 		}
 
 		this.options = options;
@@ -49,7 +46,7 @@ export default class Fetch {
 	 * @return {Fetch}
 	 */
 	setHeader(key, value) {
-		this.options.headers.set(key, value);
+		this.options.headers[key] = value;
 
 		return this;
 	}
@@ -61,7 +58,7 @@ export default class Fetch {
 	 * @return {Fetch}
 	 */
 	deleteHeader(key) {
-		this.options.headers.delete(key);
+		delete this.options.headers.delete[key];
 
 		return this;
 	}
