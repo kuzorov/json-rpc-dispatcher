@@ -1,115 +1,99 @@
+import Fetch from '../../logic/common/fileUploadDispatcher/uploadAdapters/Fetch';
 import responseFactory from './providers/responseFactory';
 import toJsonRpc from './providers/toJsonRpc';
 
 export default class Dispatcher {
-	/**
-	 *
-	 * @param {object} adapter
-	 */
-	constructor(adapter) {
-		this.adapter = adapter;
-	}
+  /**
+   *
+   * @param {object} adapter
+   */
+  constructor(adapter) {
+    this.adapter = adapter;
+  }
 
-	/**
-	 * Request
-	 *
-	 * @param payload
-	 * @return {*|Promise.<TResult>}
-	 */
-	request(payload) {
-		return this.getAdapter().request(toJsonRpc(payload)).then(
-			res => responseFactory(payload, res),
-			res => responseFactory(payload, res)
-		);
-	}
+  /**
+   * Request
+   *
+   * @param payload
+   * @return {*|Promise.<TResult>}
+   */
+  request(payload) {
+    return this.getAdapter().request(toJsonRpc(payload), payload.getId()).then(
+      res => responseFactory(payload, res),
+      res => responseFactory(payload, res)
+    );
+  }
 
-	/**
-	 * Notification
-	 *
-	 * @param payload
-	 */
-	notify(payload) {
-		return this.getAdapter().notify(toJsonRpc(payload))
-			.catch(res => responseFactory(payload, res));
-	}
+  /**
+   * Notification
+   *
+   * @param payload
+   */
+  notify(payload) {
+    return this.getAdapter().notify(toJsonRpc(payload))
+      .catch(res => responseFactory(payload, res));
+  }
 
-	/**
-	 * Request to specified url
-	 *
-	 * @param url
-	 * @param {Array|object} payload
-	 * @return {*|Promise.<TResult>}
-	 */
-	requestUrl(payload, url) {
-		let adapter = Object.assign(Object.create(this.getAdapter()), this.getAdapter(), { url });
+  /**
+   * Request to specified url
+   *
+   * @param url
+   * @param {Array|object} payload
+   * @return {*|Promise.<TResult>}
+   */
+  requestUrl(payload, url) {
+    if (!this.getAdapter() instanceof Fetch) {
+      throw 'Only Fetch adapter supports requestUrl method'
+    }
 
-		return adapter.request(toJsonRpc(payload)).then(
-			res => responseFactory(payload, res),
-			res => responseFactory(payload, res)
-		);
-	}
+    let adapter = Object.assign(Object.create(this.getAdapter()), this.getAdapter(), { url });
 
-	/**
-	 * Notify to specified url
-	 *
-	 * @param url
-	 * @param payload
-	 * @return {*|Promise.<TResult>}
-	 */
-	notifyUrl(payload, url) {
-		let adapter = Object.assign(Object.create(this.getAdapter()), this.getAdapter(), { url });
+    return adapter.request(toJsonRpc(payload)).then(
+      res => responseFactory(payload, res),
+      res => responseFactory(payload, res)
+    );
+  }
 
-		return adapter.notify(toJsonRpc(payload))
-			.catch(res => responseFactory(payload, res));
-	}
+  /**
+   * Notify to specified url
+   *
+   * @param url
+   * @param payload
+   * @return {*|Promise.<TResult>}
+   */
+  notifyUrl(payload, url) {
+    if (!this.getAdapter() instanceof Fetch) {
+      throw 'Only Fetch adapter supports notifyUrl method'
+    }
 
-	/**
-	 * Set header
-	 *
-	 * @param {string} key
-	 * @param {string|number} value
-	 * @return {Dispatcher}
-	 */
-	setHeader(key, value) {
-		this.adapter.setHeader(key, value);
+    let adapter = Object.assign(Object.create(this.getAdapter()), this.getAdapter(), { url });
 
-		return this;
-	}
+    return adapter.notify(toJsonRpc(payload))
+      .catch(res => responseFactory(payload, res));
+  }
 
-	/**
-	 * Delete header
-	 *
-	 * @param {string} key
-	 * @return {Dispatcher}
-	 */
-	deleteHeader(key) {
-		this.adapter.deleteHeader(key);
+  /**
+   * Get adapter
+   *
+   * @return {*}
+   */
+  getAdapter() {
+    if (!this.adapter) {
+      throw 'Adapter is not set'
+    }
 
-		return this;
-	}
+    return this.adapter;
+  }
 
-	/**
-	 * Get adapter
-	 *
-	 * @return {*}
-	 */
-	getAdapter() {
-		if (!this.adapter) {
-			throw 'Adapter is not set'
-		}
+  /**
+   * Set adapter
+   *
+   * @param {object} adapter
+   * @return {Dispatcher}
+   */
+  setAdapter(adapter) {
+    this.adapter = adapter;
 
-		return this.adapter;
-	}
-
-	/**
-	 * Set adapter
-	 *
-	 * @param {object} adapter
-	 * @return {Dispatcher}
-	 */
-	setAdapter(adapter) {
-		this.adapter = adapter;
-
-		return this;
-	}
+    return this;
+  }
 }
