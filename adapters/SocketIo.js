@@ -17,11 +17,11 @@ export default class SocketIo {
    *
    * @return {Promise}
    */
-  request(payload, id = uuid()) {
+  request(payload, id) {
     this.socket.emit('socket.request', payload);
 
     return new Promise((resolve, reject) => {
-      this.socket.on(id, data => {
+      this.socket.on(`socket.response.${id}`, data => {
         resolve(data);
       });
     });
