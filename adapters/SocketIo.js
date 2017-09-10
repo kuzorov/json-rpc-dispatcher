@@ -1,5 +1,3 @@
-import uuid from 'uuid';
-
 export default class SocketIo {
   /**
    *
@@ -18,10 +16,10 @@ export default class SocketIo {
    * @return {Promise}
    */
   request(payload, id) {
-    this.socket.emit('socket.request', payload);
+    this.socket.emit('request', payload);
 
     return new Promise((resolve, reject) => {
-      this.socket.on(`socket.response.${id}`, data => {
+      this.socket.on(`response.${id}`, data => {
         resolve(data);
       });
     });
@@ -35,7 +33,7 @@ export default class SocketIo {
    * @return {Promise}
    */
   notify(payload) {
-    this.socket.emit('socket.request', payload);
+    this.socket.emit('request', payload);
 
     return Promise.resolve();
   }
