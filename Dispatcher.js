@@ -1,4 +1,4 @@
-import Fetch from '../../logic/common/fileUploadDispatcher/uploadAdapters/Fetch';
+import Fetch from 'adapters/Fetch';
 import responseFactory from './providers/responseFactory';
 import toJsonRpc from './providers/toJsonRpc';
 
