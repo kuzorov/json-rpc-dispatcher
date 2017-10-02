@@ -1,6 +1,6 @@
 {
 	"name": "json-rpc-dispatcher",
-	"version": "2.1.5",
+	"version": "2.1.6",
 	"description": "JSON-RPC 2.0 client implementation",
 	"keywords": [
 		"json",
@@ -23,8 +23,8 @@
 		"babel": "^6.23.0",
 		"babel-cli": "^6.26.0",
 		"babel-eslint": "^7.2.3",
-		"babel-preset-es2015": "^6.24.1",
 		"babel-preset-stage-3": "^6.24.1",
+		"babel-preset-env": "^1.6.0",
 		"eslint": "^4.4.1"
 	},
 	"repository": "https://github.com/kuzorov/json-rpc-dispatcher.git",
