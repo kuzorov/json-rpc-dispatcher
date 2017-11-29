@@ -9,6 +9,8 @@ export default class Dispatcher {
    */
   constructor(adapter) {
     this.adapter = adapter;
+    this.requestInterceptors = [];
+    this.responseInterceptors = [];
   }
 
   /**
@@ -18,9 +20,11 @@ export default class Dispatcher {
    * @return {*|Promise.<TResult>}
    */
   request(payload) {
+    payload = this.execRequestInterceptors(payload);
+
     return this.getAdapter().request(toJsonRpc(payload), payload.getId()).then(
-      res => responseFactory(payload, res),
-      res => responseFactory(payload, res)
+      res => this.execResponseInterceptors(responseFactory(payload, res), payload),
+      res => this.execResponseInterceptors(responseFactory(payload, res), payload)
     );
   }
 
@@ -43,15 +47,103 @@ export default class Dispatcher {
    */
   requestUrl(payload, url) {
     if (!this.getAdapter() instanceof Fetch) {
-      throw 'Only Fetch adapter supports requestUrl method'
+      throw 'Only Fetch adapter supports requestUrl method';
     }
 
     let adapter = Object.assign(Object.create(this.getAdapter()), this.getAdapter(), { url });
+    payload = this.execRequestInterceptors(payload);
 
     return adapter.request(toJsonRpc(payload)).then(
-      res => responseFactory(payload, res),
-      res => responseFactory(payload, res)
+      res => this.execResponseInterceptors(responseFactory(payload, res), payload),
+      res => this.execResponseInterceptors(responseFactory(payload, res), payload)
     );
+  }
+
+  /**
+   * Add interceptor before request
+   *
+   * @param {function} callback
+   * @return {Dispatcher}
+   */
+  interceptRequest(callback) {
+    if (typeof callback !== 'function') {
+      throw 'Interceptor must be a function';
+    }
+    this.requestInterceptors.push(callback);
+
+    return this;
+  }
+
+  /**
+   * Add interceptor before response
+   *
+   * @param {function} callback
+   * @return {Dispatcher}
+   */
+  interceptResponse(callback) {
+    if (typeof callback !== 'function') {
+      throw 'Interceptor must be a function';
+    }
+    this.responseInterceptors.push(callback);
+
+    return this;
+  }
+
+  /**
+   * Delete interceptor before response
+   *
+   * @param {function} callback
+   * @return {Dispatcher}
+   */
+  deleteRequestInterceptor(callback) {
+    this.requestInterceptors = this.requestInterceptors.filter(el => el !== callback);
+
+    return this;
+  }
+
+  /**
+   * Delete interceptor before response
+   *
+   * @param {function} callback
+   * @return {Dispatcher}
+   */
+  deleteResponseInterceptor(callback) {
+    this.requestInterceptors = this.responseInterceptors.filter(el => el !== callback);
+
+    return this;
+  }
+
+  /**
+   * Exec request interceptors
+   *
+   * @param {object} payload
+   * @return {object}
+   * @private
+   */
+  execRequestInterceptors(payload) {
+    if (!this.requestInterceptors.length) {
+      return payload;
+    }
+    this.requestInterceptors.forEach(callback => payload = callback(payload));
+
+    return payload;
+  }
+
+  /**
+   * Exec response interceptors
+   *
+   * @param {object} response
+   * @param {object} payload
+   * @return {object}
+   * @private
+   */
+  execResponseInterceptors(response, payload) {
+    if (!this.responseInterceptors.length) {
+      return response;
+    }
+    this.responseInterceptors.forEach(callback => response = callback(response, payload));
+
+    return response;
   }
 
   /**
@@ -63,7 +155,7 @@ export default class Dispatcher {
    */
   notifyUrl(payload, url) {
     if (!this.getAdapter() instanceof Fetch) {
-      throw 'Only Fetch adapter supports notifyUrl method'
+      throw 'Only Fetch adapter supports notifyUrl method';
     }
 
     let adapter = Object.assign(Object.create(this.getAdapter()), this.getAdapter(), { url });
@@ -79,7 +171,7 @@ export default class Dispatcher {
    */
   getAdapter() {
     if (!this.adapter) {
-      throw 'Adapter is not set'
+      throw 'Adapter is not set';
     }
 
     return this.adapter;

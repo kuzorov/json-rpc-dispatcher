@@ -8,6 +8,19 @@ let adapter = new adapters.Fetch('http://api.com');
 
 let rpc = new Rpc(adapter);
  
+rpc.interceptRequest((request) => {
+  // ...
+  return request;  
+});
+ 
+rpc.interceptResponse((response, request) => {
+  // ...
+  return response;  
+});
+ 
+rpc.deleteRequestInterceptor(callback);
+rpc.deleteResponseInterceptor(callback);
+ 
 let req1 = new Request({ id: 1, params: { param1: 'param1', param2: 'param2' } });
 let req2 = new Request({ id: 2, params: { param1: 'param1', param2: 'param2' } });
  

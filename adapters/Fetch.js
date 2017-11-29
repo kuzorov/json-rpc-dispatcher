@@ -11,10 +11,13 @@ export default class Fetch {
       options.method = 'POST';
     }
     if (!options.headers) {
-      options.headers = { 'Content-Type': 'application/json' }
+      options.headers = {};
+    }
+    if (!options.headers['Content-Type']) {
+      options.headers['Content-Type'] = 'application/json';
     }
     if (!options.credentials) {
-      options.credentials = 'include'
+      options.credentials = 'include';
     }
 
     this.options = options;
@@ -40,6 +43,6 @@ export default class Fetch {
    * @param {string} payload
    */
   notify(payload) {
-    return fetch(this.url, { body: payload, ...this.options })
+    return fetch(this.url, { body: payload, ...this.options });
   }
 }

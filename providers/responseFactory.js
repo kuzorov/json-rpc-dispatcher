@@ -16,7 +16,7 @@ export default function responseFactory(req, res) {
 
     return getResponseObj(res);
   } catch (e) {
-    return new JsonRpcError({ id: null, error: { code: -32603, message: 'Error while processing response', data: e } })
+    return new JsonRpcError({ id: null, error: { code: -32603, message: 'Error while processing response', data: e } });
   }
 }
 

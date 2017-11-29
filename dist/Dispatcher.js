@@ -31,6 +31,8 @@ var Dispatcher = function () {
     _classCallCheck(this, Dispatcher);
 
     this.adapter = adapter;
+    this.requestInterceptors = [];
+    this.responseInterceptors = [];
   }
 
   /**
@@ -44,10 +46,14 @@ var Dispatcher = function () {
   _createClass(Dispatcher, [{
     key: 'request',
     value: function request(payload) {
+      var _this = this;
+
+      payload = this.execRequestInterceptors(payload);
+
       return this.getAdapter().request((0, _toJsonRpc2.default)(payload), payload.getId()).then(function (res) {
-        return (0, _responseFactory2.default)(payload, res);
+        return _this.execResponseInterceptors((0, _responseFactory2.default)(payload, res), payload);
       }, function (res) {
-        return (0, _responseFactory2.default)(payload, res);
+        return _this.execResponseInterceptors((0, _responseFactory2.default)(payload, res), payload);
       });
     }
 
@@ -76,17 +82,133 @@ var Dispatcher = function () {
   }, {
     key: 'requestUrl',
     value: function requestUrl(payload, url) {
+      var _this2 = this;
+
       if (!this.getAdapter() instanceof _Fetch2.default) {
         throw 'Only Fetch adapter supports requestUrl method';
       }
 
       var adapter = Object.assign(Object.create(this.getAdapter()), this.getAdapter(), { url: url });
+      payload = this.execRequestInterceptors(payload);
 
       return adapter.request((0, _toJsonRpc2.default)(payload)).then(function (res) {
-        return (0, _responseFactory2.default)(payload, res);
+        return _this2.execResponseInterceptors((0, _responseFactory2.default)(payload, res), payload);
       }, function (res) {
-        return (0, _responseFactory2.default)(payload, res);
+        return _this2.execResponseInterceptors((0, _responseFactory2.default)(payload, res), payload);
       });
+    }
+
+    /**
+     * Add interceptor before request
+     *
+     * @param {function} callback
+     * @return {Dispatcher}
+     */
+
+  }, {
+    key: 'interceptRequest',
+    value: function interceptRequest(callback) {
+      if (typeof callback !== 'function') {
+        throw 'Interceptor must be a function';
+      }
+      this.requestInterceptors.push(callback);
+
+      return this;
+    }
+
+    /**
+     * Add interceptor before response
+     *
+     * @param {function} callback
+     * @return {Dispatcher}
+     */
+
+  }, {
+    key: 'interceptResponse',
+    value: function interceptResponse(callback) {
+      if (typeof callback !== 'function') {
+        throw 'Interceptor must be a function';
+      }
+      this.responseInterceptors.push(callback);
+
+      return this;
+    }
+
+    /**
+     * Delete interceptor before response
+     *
+     * @param {function} callback
+     * @return {Dispatcher}
+     */
+
+  }, {
+    key: 'deleteRequestInterceptor',
+    value: function deleteRequestInterceptor(callback) {
+      this.requestInterceptors = this.requestInterceptors.filter(function (el) {
+        return el !== callback;
+      });
+
+      return this;
+    }
+
+    /**
+     * Delete interceptor before response
+     *
+     * @param {function} callback
+     * @return {Dispatcher}
+     */
+
+  }, {
+    key: 'deleteResponseInterceptor',
+    value: function deleteResponseInterceptor(callback) {
+      this.requestInterceptors = this.responseInterceptors.filter(function (el) {
+        return el !== callback;
+      });
+
+      return this;
+    }
+
+    /**
+     * Exec request interceptors
+     *
+     * @param {object} payload
+     * @return {object}
+     * @private
+     */
+
+  }, {
+    key: 'execRequestInterceptors',
+    value: function execRequestInterceptors(payload) {
+      if (!this.requestInterceptors.length) {
+        return payload;
+      }
+      this.requestInterceptors.forEach(function (callback) {
+        return payload = callback(payload);
+      });
+
+      return payload;
+    }
+
+    /**
+     * Exec response interceptors
+     *
+     * @param {object} response
+     * @param {object} payload
+     * @return {object}
+     * @private
+     */
+
+  }, {
+    key: 'execResponseInterceptors',
+    value: function execResponseInterceptors(response, payload) {
+      if (!this.responseInterceptors.length) {
+        return response;
+      }
+      this.responseInterceptors.forEach(function (callback) {
+        return response = callback(response, payload);
+      });
+
+      return response;
     }
 
     /**

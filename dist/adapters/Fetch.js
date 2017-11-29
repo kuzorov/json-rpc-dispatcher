@@ -32,7 +32,10 @@ var Fetch = function () {
       options.method = 'POST';
     }
     if (!options.headers) {
-      options.headers = { 'Content-Type': 'application/json' };
+      options.headers = {};
+    }
+    if (!options.headers['Content-Type']) {
+      options.headers['Content-Type'] = 'application/json';
     }
     if (!options.credentials) {
       options.credentials = 'include';
