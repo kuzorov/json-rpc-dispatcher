@@ -29,10 +29,15 @@ export default class Fetch {
    *
    * @param {string} payload
    * @param {string} id
+   * @param {?string} method
    *
    * @return {Promise}
    */
-  request(payload, id = uuid()) {
+  request(payload, id = uuid(), method = null) {
+    if (method) {
+      this.options.headers['X-JsonRpc-Method'] = method;
+    }
+
     return fetch(this.url, { body: payload, ...this.options })
       .then(data => data.json());
   }
@@ -40,9 +45,14 @@ export default class Fetch {
   /**
    * Send notification to server
    *
+   * @param {?string} method
    * @param {string} payload
    */
-  notify(payload) {
+  notify(payload, method = null) {
+    if (method) {
+      this.options.headers['X-JsonRpc-Method'] = method;
+    }
+
     return fetch(this.url, { body: payload, ...this.options });
   }
 }

@@ -19,6 +19,15 @@ export default class Notification {
   }
 
   /**
+   * Get rpc method
+   *
+   * @return {string}
+   */
+  getMethod() {
+    return this.method;
+  }
+
+  /**
    * Convert to JSON-RPC compatible string
    */
   toJsonRpc() {

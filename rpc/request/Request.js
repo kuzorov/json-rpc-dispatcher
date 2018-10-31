@@ -29,6 +29,15 @@ export default class Request {
   }
 
   /**
+   * Get rpc method
+   *
+   * @return {string}
+   */
+  getMethod() {
+    return this.method;
+  }
+
+  /**
    * Get request id
    *
    * @return {string}

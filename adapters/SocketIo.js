@@ -1,3 +1,5 @@
+import uuid from 'uuid';
+
 export default class SocketIo {
   /**
    *
@@ -15,7 +17,7 @@ export default class SocketIo {
    *
    * @return {Promise}
    */
-  request(payload, id) {
+  request(payload, id = uuid()) {
     this.socket.emit('request', payload);
 
     return new Promise((resolve, reject) => {

@@ -22,7 +22,7 @@ export default class Dispatcher {
   request(payload) {
     payload = this.execRequestInterceptors(payload);
 
-    return this.getAdapter().request(toJsonRpc(payload), payload.getId()).then(
+    return this.getAdapter().request(toJsonRpc(payload), payload.getId(), payload.getMethod()).then(
       res => this.execResponseInterceptors(responseFactory(payload, res), payload),
       res => this.execResponseInterceptors(responseFactory(payload, res), payload)
     );
@@ -34,7 +34,7 @@ export default class Dispatcher {
    * @param payload
    */
   notify(payload) {
-    return this.getAdapter().notify(toJsonRpc(payload))
+    return this.getAdapter().notify(toJsonRpc(payload), payload.getMethod())
       .catch(res => responseFactory(payload, res));
   }
 
@@ -53,7 +53,7 @@ export default class Dispatcher {
     let adapter = Object.assign(Object.create(this.getAdapter()), this.getAdapter(), { url });
     payload = this.execRequestInterceptors(payload);
 
-    return adapter.request(toJsonRpc(payload)).then(
+    return adapter.request(toJsonRpc(payload), payload.getId(), payload.getMethod()).then(
       res => this.execResponseInterceptors(responseFactory(payload, res), payload),
       res => this.execResponseInterceptors(responseFactory(payload, res), payload)
     );
@@ -72,6 +72,24 @@ export default class Dispatcher {
     this.requestInterceptors.push(callback);
 
     return this;
+  }
+
+  /**
+   * Notify to specified url
+   *
+   * @param url
+   * @param payload
+   * @return {*|Promise.<TResult>}
+   */
+  notifyUrl(payload, url) {
+    if (!this.getAdapter() instanceof Fetch) {
+      throw 'Only Fetch adapter supports notifyUrl method';
+    }
+
+    let adapter = Object.assign(Object.create(this.getAdapter()), this.getAdapter(), { url });
+
+    return adapter.notify(toJsonRpc(payload), payload.getMethod())
+      .catch(res => responseFactory(payload, res));
   }
 
   /**
@@ -144,24 +162,6 @@ export default class Dispatcher {
     this.responseInterceptors.forEach(callback => response = callback(response, payload));
 
     return response;
-  }
-
-  /**
-   * Notify to specified url
-   *
-   * @param url
-   * @param payload
-   * @return {*|Promise.<TResult>}
-   */
-  notifyUrl(payload, url) {
-    if (!this.getAdapter() instanceof Fetch) {
-      throw 'Only Fetch adapter supports notifyUrl method';
-    }
-
-    let adapter = Object.assign(Object.create(this.getAdapter()), this.getAdapter(), { url });
-
-    return adapter.notify(toJsonRpc(payload))
-      .catch(res => responseFactory(payload, res));
   }
 
   /**
