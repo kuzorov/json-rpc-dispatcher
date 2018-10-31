@@ -50,6 +50,7 @@ var Fetch = function () {
    *
    * @param {string} payload
    * @param {string} id
+   * @param {?string} method
    *
    * @return {Promise}
    */
@@ -59,6 +60,11 @@ var Fetch = function () {
     key: 'request',
     value: function request(payload) {
       var id = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : (0, _uuid2.default)();
+      var method = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+
+      if (method) {
+        this.options.headers['X-JsonRpc-Method'] = method;
+      }
 
       return fetch(this.url, _extends({ body: payload }, this.options)).then(function (data) {
         return data.json();
@@ -68,12 +74,19 @@ var Fetch = function () {
     /**
      * Send notification to server
      *
+     * @param {?string} method
      * @param {string} payload
      */
 
   }, {
     key: 'notify',
     value: function notify(payload) {
+      var method = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+      if (method) {
+        this.options.headers['X-JsonRpc-Method'] = method;
+      }
+
       return fetch(this.url, _extends({ body: payload }, this.options));
     }
   }]);

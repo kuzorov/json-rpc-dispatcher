@@ -33,11 +33,23 @@ var Notification = function () {
   }
 
   /**
-   * Convert to JSON-RPC compatible string
+   * Get rpc method
+   *
+   * @return {string}
    */
 
 
   _createClass(Notification, [{
+    key: 'getMethod',
+    value: function getMethod() {
+      return this.method;
+    }
+
+    /**
+     * Convert to JSON-RPC compatible string
+     */
+
+  }, {
     key: 'toJsonRpc',
     value: function toJsonRpc() {
       return JSON.stringify(_extends({ jsonrpc: '2.0' }, this));

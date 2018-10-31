@@ -43,13 +43,25 @@ var Request = function () {
   }
 
   /**
-   * Get request id
+   * Get rpc method
    *
    * @return {string}
    */
 
 
   _createClass(Request, [{
+    key: 'getMethod',
+    value: function getMethod() {
+      return this.method;
+    }
+
+    /**
+     * Get request id
+     *
+     * @return {string}
+     */
+
+  }, {
     key: 'getId',
     value: function getId() {
       return this.id;

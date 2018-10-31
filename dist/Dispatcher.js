@@ -50,7 +50,7 @@ var Dispatcher = function () {
 
       payload = this.execRequestInterceptors(payload);
 
-      return this.getAdapter().request((0, _toJsonRpc2.default)(payload), payload.getId()).then(function (res) {
+      return this.getAdapter().request((0, _toJsonRpc2.default)(payload), payload.getId(), payload.getMethod()).then(function (res) {
         return _this.execResponseInterceptors((0, _responseFactory2.default)(payload, res), payload);
       }, function (res) {
         return _this.execResponseInterceptors((0, _responseFactory2.default)(payload, res), payload);
@@ -66,7 +66,7 @@ var Dispatcher = function () {
   }, {
     key: 'notify',
     value: function notify(payload) {
-      return this.getAdapter().notify((0, _toJsonRpc2.default)(payload)).catch(function (res) {
+      return this.getAdapter().notify((0, _toJsonRpc2.default)(payload), payload.getMethod()).catch(function (res) {
         return (0, _responseFactory2.default)(payload, res);
       });
     }
@@ -91,7 +91,7 @@ var Dispatcher = function () {
       var adapter = Object.assign(Object.create(this.getAdapter()), this.getAdapter(), { url: url });
       payload = this.execRequestInterceptors(payload);
 
-      return adapter.request((0, _toJsonRpc2.default)(payload)).then(function (res) {
+      return adapter.request((0, _toJsonRpc2.default)(payload), payload.getId(), payload.getMethod()).then(function (res) {
         return _this2.execResponseInterceptors((0, _responseFactory2.default)(payload, res), payload);
       }, function (res) {
         return _this2.execResponseInterceptors((0, _responseFactory2.default)(payload, res), payload);
@@ -114,6 +114,28 @@ var Dispatcher = function () {
       this.requestInterceptors.push(callback);
 
       return this;
+    }
+
+    /**
+     * Notify to specified url
+     *
+     * @param url
+     * @param payload
+     * @return {*|Promise.<TResult>}
+     */
+
+  }, {
+    key: 'notifyUrl',
+    value: function notifyUrl(payload, url) {
+      if (!this.getAdapter() instanceof _Fetch2.default) {
+        throw 'Only Fetch adapter supports notifyUrl method';
+      }
+
+      var adapter = Object.assign(Object.create(this.getAdapter()), this.getAdapter(), { url: url });
+
+      return adapter.notify((0, _toJsonRpc2.default)(payload), payload.getMethod()).catch(function (res) {
+        return (0, _responseFactory2.default)(payload, res);
+      });
     }
 
     /**
@@ -209,28 +231,6 @@ var Dispatcher = function () {
       });
 
       return response;
-    }
-
-    /**
-     * Notify to specified url
-     *
-     * @param url
-     * @param payload
-     * @return {*|Promise.<TResult>}
-     */
-
-  }, {
-    key: 'notifyUrl',
-    value: function notifyUrl(payload, url) {
-      if (!this.getAdapter() instanceof _Fetch2.default) {
-        throw 'Only Fetch adapter supports notifyUrl method';
-      }
-
-      var adapter = Object.assign(Object.create(this.getAdapter()), this.getAdapter(), { url: url });
-
-      return adapter.notify((0, _toJsonRpc2.default)(payload)).catch(function (res) {
-        return (0, _responseFactory2.default)(payload, res);
-      });
     }
 
     /**
