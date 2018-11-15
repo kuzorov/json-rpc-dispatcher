@@ -73,7 +73,7 @@ function sortRes(req, res) {
  * @return {*}
  */
 function getResponseObj(res) {
-  if (res.result) {
+  if (res && 'result' in res) {
     return new _Success2.default(res);
   }
   if (res.error) {
