@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.adapters = exports.JsonRpcError = exports.Error = exports.Success = exports.Notification = exports.Request = undefined;
+exports.interceptors = exports.adapters = exports.JsonRpcError = exports.Error = exports.Success = exports.Notification = exports.Request = undefined;
 
 var _Fetch = require('./adapters/Fetch');
 
@@ -16,6 +16,10 @@ var _SocketIo2 = _interopRequireDefault(_SocketIo);
 var _Dispatcher = require('./Dispatcher');
 
 var _Dispatcher2 = _interopRequireDefault(_Dispatcher);
+
+var _transformErrorToException = require('./interceptors/response/transformErrorToException');
+
+var _transformErrorToException2 = _interopRequireDefault(_transformErrorToException);
 
 var _Notification = require('./rpc/request/Notification');
 
@@ -44,6 +48,12 @@ var adapters = {
   SocketIo: _SocketIo2.default
 };
 
+var interceptors = {
+  response: {
+    transformErrorToException: _transformErrorToException2.default
+  }
+};
+
 exports.default = _Dispatcher2.default;
 exports.Request = _Request2.default;
 exports.Notification = _Notification2.default;
@@ -51,3 +61,4 @@ exports.Success = _Success2.default;
 exports.Error = _Error2.default;
 exports.JsonRpcError = _JsonRpcError2.default;
 exports.adapters = adapters;
+exports.interceptors = interceptors;
