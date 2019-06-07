@@ -1,30 +1,23 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 exports.default = responseFactory;
 
-var _Error = require('./../rpc/response/Error');
+var _Error = _interopRequireDefault(require("./../rpc/response/Error"));
 
-var _Error2 = _interopRequireDefault(_Error);
+var _JsonRpcError = _interopRequireDefault(require("./../rpc/response/JsonRpcError"));
 
-var _JsonRpcError = require('./../rpc/response/JsonRpcError');
-
-var _JsonRpcError2 = _interopRequireDefault(_JsonRpcError);
-
-var _Success = require('./../rpc/response/Success');
-
-var _Success2 = _interopRequireDefault(_Success);
+var _Success = _interopRequireDefault(require("./../rpc/response/Success"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function responseFactory(req, res) {
   try {
-    if ((typeof res === 'undefined' ? 'undefined' : _typeof(res)) !== 'object') {
+    if (_typeof(res) !== 'object') {
       res = JSON.parse(res);
     }
 
@@ -32,16 +25,21 @@ function responseFactory(req, res) {
       res = res.map(function (payload) {
         return getResponseObj(payload);
       });
-
       return sortRes(req, res);
     }
 
     return getResponseObj(res);
   } catch (e) {
-    return new _JsonRpcError2.default({ id: null, error: { code: -32603, message: 'Error while processing response', data: e } });
+    return new _JsonRpcError.default({
+      id: null,
+      error: {
+        code: -32603,
+        message: 'Error while processing response',
+        data: e
+      }
+    });
   }
 }
-
 /**
  * Sort response according to batch request order
  *
@@ -50,6 +48,8 @@ function responseFactory(req, res) {
  *
  * @return {Array}
  */
+
+
 function sortRes(req, res) {
   var sorted = [];
 
@@ -65,27 +65,33 @@ function sortRes(req, res) {
 
   return sorted;
 }
-
 /**
  * Get response object
  *
  * @param res
  * @return {*}
  */
+
+
 function getResponseObj(res) {
   if (res && 'result' in res) {
-    return new _Success2.default(res);
+    return new _Success.default(res);
   }
+
   if (res.error) {
     if (res.error.code > -32768 && res.error.code < -32000) {
-      return new _JsonRpcError2.default(res);
+      return new _JsonRpcError.default(res);
     }
 
-    return new _Error2.default(res);
+    return new _Error.default(res);
   }
 
-  return new _JsonRpcError2.default({
+  return new _JsonRpcError.default({
     id: null,
-    error: { code: -32603, message: 'Error while processing response', data: res }
+    error: {
+      code: -32603,
+      message: 'Error while processing response',
+      data: res
+    }
   });
 }

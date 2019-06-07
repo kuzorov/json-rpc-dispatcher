@@ -1,32 +1,33 @@
 {
-	"name": "json-rpc-dispatcher",
-	"version": "2.2.6",
-	"description": "JSON-RPC 2.0 client implementation",
-	"keywords": [
-		"json",
-		"rpc",
-		"json-rpc",
-		"jsonrpc",
-		"client"
-	],
-	"main": "dist/index.js",
-	"scripts": {
-		"start": "node -r babel-register -r babel-polyfill index.js",
-		"build": "./node_modules/.bin/babel . -d dist --ignore='node_modules,dist'",
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"author": "Evgeniy Kuzorov <kuzorov@gmail.com>",
-	"dependencies": {
-		"uuid": "^3.0.1"
-	},
-	"devDependencies": {
-		"babel": "^6.23.0",
-		"babel-cli": "^6.26.0",
-		"babel-eslint": "^7.2.3",
-		"babel-preset-stage-3": "^6.24.1",
-		"babel-preset-env": "^1.6.0",
-		"eslint": "^4.4.1"
-	},
-	"repository": "https://github.com/kuzorov/json-rpc-dispatcher.git",
-	"license": "MIT"
+  "name": "json-rpc-dispatcher",
+  "version": "2.2.7",
+  "description": "JSON-RPC 2.0 client implementation",
+  "keywords": [
+    "json",
+    "rpc",
+    "json-rpc",
+    "jsonrpc",
+    "client"
+  ],
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node -r @babel/register -r @babel/polyfill index.js",
+    "build": "./node_modules/.bin/babel . -d dist --ignore='node_modules,dist'",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Evgeniy Kuzorov <kuzorov@gmail.com>",
+  "dependencies": {
+    "uuid": "^3.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/cli": "^7.4.4",
+    "babel-eslint": "^10.0.1",
+    "@babel/polyfill": "^7.4.4",
+    "@babel/register": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
+    "eslint": "^5.16.0"
+  },
+  "repository": "https://github.com/kuzorov/json-rpc-dispatcher.git",
+  "license": "MIT"
 }

@@ -1,9 +1,10 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = toJsonRpc;
+
 /**
  * Convert to JSON-RPC json using some lib-level magic
  *
