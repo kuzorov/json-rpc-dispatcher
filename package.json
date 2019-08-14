@@ -1,6 +1,6 @@
 {
-  "name": "json-rpc-dispatcher",
-  "version": "2.2.7",
+  "name": "@kuzorov/json-rpc-dispatcher",
+  "version": "2.2.8",
   "description": "JSON-RPC 2.0 client implementation",
   "keywords": [
     "json",
@@ -12,22 +12,29 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "node -r @babel/register -r @babel/polyfill index.js",
-    "build": "./node_modules/.bin/babel . -d dist --ignore='node_modules,dist'",
+    "build": "babel . -d dist --ignore='node_modules,dist'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Evgeniy Kuzorov <kuzorov@gmail.com>",
   "dependencies": {
-    "uuid": "^3.0.1"
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.5",
-    "@babel/cli": "^7.4.4",
-    "babel-eslint": "^10.0.1",
+    "@babel/core": "^7.5.5",
+    "@babel/cli": "^7.5.5",
+    "babel-eslint": "^10.0.2",
     "@babel/polyfill": "^7.4.4",
-    "@babel/register": "^7.4.4",
-    "@babel/preset-env": "^7.4.5",
-    "eslint": "^5.16.0"
+    "@babel/register": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "eslint": "^6.1.0"
   },
-  "repository": "https://github.com/kuzorov/json-rpc-dispatcher.git",
-  "license": "MIT"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kuzorov/json-rpc-dispatcher.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kuzorov/json-rpc-dispatcher/issues"
+  },
+  "homepage": "https://github.com/kuzorov/json-rpc-dispatcher#readme"
 }
