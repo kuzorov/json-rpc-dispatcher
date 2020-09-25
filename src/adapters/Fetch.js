@@ -55,9 +55,9 @@ export default class Fetch {
   addMethodHeader(payload) {
     if (!Array.isArray(payload)) {
       this.options.headers['X-JsonRpc-Method'] = payload.method;
+    } else {
+      this.options.headers['X-JsonRpc-Method'] = payload.reduce((acc, request) => acc.push(request.method), []).join(',');
     }
-
-    this.options.headers['X-JsonRpc-Method'] = payload.reduce((acc, request) => acc.push(request.method), []).join(',');
 
     return this;
   }
