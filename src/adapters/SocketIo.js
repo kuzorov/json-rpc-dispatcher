@@ -1,4 +1,4 @@
-import uuid from 'uuid';
+import { v4 as uuid } from 'uuid';
 
 export default class SocketIo {
   /**
@@ -13,7 +13,6 @@ export default class SocketIo {
    * Send request to server
    *
    * @param {string} payload
-   * @param {string} id
    *
    * @return {Promise}
    */

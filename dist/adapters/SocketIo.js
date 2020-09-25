@@ -5,9 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _uuid = _interopRequireDefault(require("uuid"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _uuid = require("uuid");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -29,7 +27,6 @@ var SocketIo = /*#__PURE__*/function () {
    * Send request to server
    *
    * @param {string} payload
-   * @param {string} id
    *
    * @return {Promise}
    */
@@ -40,7 +37,7 @@ var SocketIo = /*#__PURE__*/function () {
     value: function request(payload) {
       var _this = this;
 
-      var id = (0, _uuid.default)();
+      var id = (0, _uuid.v4)();
       this.socket.emit('request', JSON.stringify(payload));
       return new Promise(function (resolve) {
         _this.socket.on("response.".concat(id), function (data) {

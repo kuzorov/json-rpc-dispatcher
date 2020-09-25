@@ -1,6 +1,6 @@
 {
   "name": "@kuzorov/json-rpc-dispatcher",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "description": "JSON-RPC 2.0 client implementation",
   "keywords": [
     "json",
