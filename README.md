@@ -2,7 +2,10 @@
 
 ```js
 import Rpc from 'json-rpc-dispatcher';
-import { Request, Notification, Success, Error, JsonRpcError, adapters } from 'json-rpc-dispatcher';
+import { Request, Notification, Success, Error, JsonRpcError, adapters, parse } from 'json-rpc-dispatcher';
+
+// Will return one of: Request, Notification, Success, Error, JsonRpcError
+const RpcObject = parse('valid json rpc string or object');
  
 let adapter = new adapters.Fetch('http://api.com');
 
@@ -38,4 +41,5 @@ let resUrlBatch = rpc.requestUrl([req1, req2], 'http://api.com/api');
  
 rpc.notifyUrl(not1, 'http://api.com/api');
 rpc.notifyUrl([not1, not2], 'http://api.com/api');
+
 ```

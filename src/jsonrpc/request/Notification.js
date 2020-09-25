@@ -3,6 +3,7 @@ export default class Notification {
    * @param {object} payload
    */
   constructor(payload) {
+    this.jsonrpc = '2.0';
     if (!payload.method) {
       throw Error('No method specified for request');
     }
@@ -12,10 +13,12 @@ export default class Notification {
      */
     this.method = payload.method;
 
-    /**
-     * @type {object|array}
-     */
-    this.params = payload.params;
+    if (payload.params) {
+      /**
+       * @type {object|array}
+       */
+      this.params = payload.params;
+    }
   }
 
   /**
@@ -28,16 +31,9 @@ export default class Notification {
   }
 
   /**
-   * Convert to JSON-RPC compatible string
+   * @return {object|array}
    */
-  toJsonRpc() {
-    return JSON.stringify({ jsonrpc: '2.0', ...this });
-  }
-
-  /**
-   * @inheritDoc
-   */
-  toString() {
-    return this.toJsonRpc();
+  getParams() {
+    return this.params;
   }
 }

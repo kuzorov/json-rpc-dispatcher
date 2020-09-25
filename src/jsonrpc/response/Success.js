@@ -1,5 +1,6 @@
 export default class Success {
   constructor(payload) {
+    this.jsonrpc = '2.0';
     /**
      * @type {string}
      */
@@ -31,10 +32,6 @@ export default class Success {
    * @return {string|Headers}
    */
   getHeaders() {
-    if (!this.result.headers) {
-      throw 'There are no headers attribute in current response';
-    }
-
     return this.result.headers;
   }
 
@@ -44,24 +41,6 @@ export default class Success {
    * @return {*}
    */
   getPayload() {
-    if (!this.result.payload) {
-      throw 'There are no payload attribute in current response';
-    }
-
     return this.result.payload;
-  }
-
-  /**
-   * Convert to JSON-RPC compatible string
-   */
-  toJsonRpc() {
-    return JSON.stringify({ jsonrpc: '2.0', ...this });
-  }
-
-  /**
-   * @inheritDoc
-   */
-  toString() {
-    return this.toJsonRpc();
   }
 }

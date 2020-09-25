@@ -1,28 +1,15 @@
 export default class Error {
   constructor(payload) {
+    this.jsonrpc = '2.0';
     /**
      * @type {string}
      */
-    this.id = payload.id;
+    this.id = payload.id || null;
 
     /**
      * @type {{}}
      */
-    this.error = {};
-    /**
-     * @type {int}
-     */
-    this.error.code = payload.error.code;
-
-    /**
-     * @type {string}
-     */
-    this.error.message = payload.error.message;
-
-    /**
-     * {*}
-     */
-    this.error.data = payload.error.data;
+    this.error = payload.error;
   }
 
   /**
@@ -58,19 +45,5 @@ export default class Error {
    */
   getData() {
     return this.error.data;
-  }
-
-  /**
-   * Convert to JSON-RPC compatible string
-   */
-  toJsonRpc() {
-    return JSON.stringify({ jsonrpc: '2.0', ...this });
-  }
-
-  /**
-   * @inheritDoc
-   */
-  toString() {
-    return this.toJsonRpc();
   }
 }
