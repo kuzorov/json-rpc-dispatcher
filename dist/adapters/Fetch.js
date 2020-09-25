@@ -92,11 +92,12 @@ var Fetch = /*#__PURE__*/function () {
     value: function addMethodHeader(payload) {
       if (!Array.isArray(payload)) {
         this.options.headers['X-JsonRpc-Method'] = payload.method;
+      } else {
+        this.options.headers['X-JsonRpc-Method'] = payload.reduce(function (acc, request) {
+          return acc.push(request.method);
+        }, []).join(',');
       }
 
-      this.options.headers['X-JsonRpc-Method'] = payload.reduce(function (acc, request) {
-        return acc.push(request.method);
-      }, []).join(',');
       return this;
     }
   }]);
