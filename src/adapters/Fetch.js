@@ -1,5 +1,3 @@
-import uuid from 'uuid';
-
 export default class Fetch {
   /**
    *
@@ -28,31 +26,39 @@ export default class Fetch {
    * Send request to server
    *
    * @param {string} payload
-   * @param {string} id
-   * @param {?string} method
    *
    * @return {Promise}
    */
-  request(payload, id = uuid(), method = null) {
-    if (method) {
-      this.options.headers['X-JsonRpc-Method'] = method;
-    }
+  request(payload) {
+    this.addMethodHeader(payload);
 
-    return fetch(this.url, { body: payload, ...this.options })
-      .then(data => data.json());
+    return fetch(this.url, { body: JSON.stringify(payload), ...this.options })
+      .then((data) => data.json());
   }
 
   /**
    * Send notification to server
    *
-   * @param {?string} method
    * @param {string} payload
    */
-  notify(payload, method = null) {
-    if (method) {
-      this.options.headers['X-JsonRpc-Method'] = method;
+  notify(payload) {
+    this.addMethodHeader(payload);
+
+    return fetch(this.url, { body: JSON.stringify(payload), ...this.options });
+  }
+
+  /**
+   * Adds method header for logging purposes
+   *
+   * @param payload
+   */
+  addMethodHeader(payload) {
+    if (!Array.isArray(payload)) {
+      this.options.headers['X-JsonRpc-Method'] = payload.method;
     }
 
-    return fetch(this.url, { body: payload, ...this.options });
+    this.options.headers['X-JsonRpc-Method'] = payload.reduce((acc, request) => acc.push(request.method), []).join(',');
+
+    return this;
   }
 }

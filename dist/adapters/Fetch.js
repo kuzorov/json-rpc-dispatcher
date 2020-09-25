@@ -5,10 +5,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _uuid = _interopRequireDefault(require("uuid"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -21,9 +17,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var Fetch =
-/*#__PURE__*/
-function () {
+var Fetch = /*#__PURE__*/function () {
   /**
    *
    * @param {string} url
@@ -58,8 +52,6 @@ function () {
    * Send request to server
    *
    * @param {string} payload
-   * @param {string} id
-   * @param {?string} method
    *
    * @return {Promise}
    */
@@ -68,15 +60,9 @@ function () {
   _createClass(Fetch, [{
     key: "request",
     value: function request(payload) {
-      var id = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : (0, _uuid.default)();
-      var method = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-
-      if (method) {
-        this.options.headers['X-JsonRpc-Method'] = method;
-      }
-
+      this.addMethodHeader(payload);
       return fetch(this.url, _objectSpread({
-        body: payload
+        body: JSON.stringify(payload)
       }, this.options)).then(function (data) {
         return data.json();
       });
@@ -84,22 +70,34 @@ function () {
     /**
      * Send notification to server
      *
-     * @param {?string} method
      * @param {string} payload
      */
 
   }, {
     key: "notify",
     value: function notify(payload) {
-      var method = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+      this.addMethodHeader(payload);
+      return fetch(this.url, _objectSpread({
+        body: JSON.stringify(payload)
+      }, this.options));
+    }
+    /**
+     * Adds method header for logging purposes
+     *
+     * @param payload
+     */
 
-      if (method) {
-        this.options.headers['X-JsonRpc-Method'] = method;
+  }, {
+    key: "addMethodHeader",
+    value: function addMethodHeader(payload) {
+      if (!Array.isArray(payload)) {
+        this.options.headers['X-JsonRpc-Method'] = payload.method;
       }
 
-      return fetch(this.url, _objectSpread({
-        body: payload
-      }, this.options));
+      this.options.headers['X-JsonRpc-Method'] = payload.reduce(function (acc, request) {
+        return acc.push(request.method);
+      }, []).join(',');
+      return this;
     }
   }]);
 

@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _Error = _interopRequireDefault(require("../../rpc/response/Error"));
+var _Error = _interopRequireDefault(require("../../jsonrpc/response/Error"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

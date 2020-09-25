@@ -17,11 +17,12 @@ export default class SocketIo {
    *
    * @return {Promise}
    */
-  request(payload, id = uuid()) {
-    this.socket.emit('request', payload);
+  request(payload) {
+    const id = uuid();
+    this.socket.emit('request', JSON.stringify(payload));
 
-    return new Promise((resolve, reject) => {
-      this.socket.on(`response.${id}`, data => {
+    return new Promise((resolve) => {
+      this.socket.on(`response.${ id }`, (data) => {
         resolve(data);
       });
     });
@@ -35,7 +36,7 @@ export default class SocketIo {
    * @return {Promise}
    */
   notify(payload) {
-    this.socket.emit('request', payload);
+    this.socket.emit('request', JSON.stringify(payload));
 
     return Promise.resolve();
   }

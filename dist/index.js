@@ -33,6 +33,12 @@ Object.defineProperty(exports, "Success", {
     return _Success.default;
   }
 });
+Object.defineProperty(exports, "parse", {
+  enumerable: true,
+  get: function get() {
+    return _parse.default;
+  }
+});
 exports.interceptors = exports.adapters = exports.default = void 0;
 
 var _Fetch = _interopRequireDefault(require("./adapters/Fetch"));
@@ -43,15 +49,17 @@ var _Dispatcher = _interopRequireDefault(require("./Dispatcher"));
 
 var _transformErrorToException = _interopRequireDefault(require("./interceptors/response/transformErrorToException"));
 
-var _Notification = _interopRequireDefault(require("./rpc/request/Notification"));
+var _Notification = _interopRequireDefault(require("./jsonrpc/request/Notification"));
 
-var _Request = _interopRequireDefault(require("./rpc/request/Request"));
+var _Request = _interopRequireDefault(require("./jsonrpc/request/Request"));
 
-var _Error = _interopRequireDefault(require("./rpc/response/Error"));
+var _Error = _interopRequireDefault(require("./jsonrpc/response/Error"));
 
-var _JsonRpcError = _interopRequireDefault(require("./rpc/response/JsonRpcError"));
+var _JsonRpcError = _interopRequireDefault(require("./jsonrpc/response/JsonRpcError"));
 
-var _Success = _interopRequireDefault(require("./rpc/response/Success"));
+var _Success = _interopRequireDefault(require("./jsonrpc/response/Success"));
+
+var _parse = _interopRequireDefault(require("./jsonrpc/parse"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

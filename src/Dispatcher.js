@@ -1,6 +1,5 @@
 import Fetch from './adapters/Fetch';
-import responseFactory from './providers/responseFactory';
-import toJsonRpc from './providers/toJsonRpc';
+import parseResponse from './jsonrpc/parseResponse';
 
 export default class Dispatcher {
   /**
@@ -22,9 +21,9 @@ export default class Dispatcher {
   request(payload) {
     payload = this.execRequestInterceptors(payload);
 
-    return this.getAdapter().request(toJsonRpc(payload), payload.getId(), payload.getMethod()).then(
-      res => this.execResponseInterceptors(responseFactory(payload, res), payload),
-      res => this.execResponseInterceptors(responseFactory(payload, res), payload)
+    return this.getAdapter().request(payload).then(
+      (res) => this.execResponseInterceptors(parseResponse(payload, res), payload),
+      (res) => this.execResponseInterceptors(parseResponse(payload, res), payload)
     );
   }
 
@@ -34,8 +33,8 @@ export default class Dispatcher {
    * @param payload
    */
   notify(payload) {
-    return this.getAdapter().notify(toJsonRpc(payload), payload.getMethod())
-      .catch(res => responseFactory(payload, res));
+    return this.getAdapter().notify(payload, payload.getMethod())
+      .catch((res) => parseResponse(payload, res));
   }
 
   /**
@@ -46,16 +45,16 @@ export default class Dispatcher {
    * @return {*|Promise.<TResult>}
    */
   requestUrl(payload, url) {
-    if (!this.getAdapter() instanceof Fetch) {
-      throw 'Only Fetch adapter supports requestUrl method';
+    if (!(this.getAdapter() instanceof Fetch)) {
+      throw new TypeError('Only Fetch adapter supports requestUrl method');
     }
 
     let adapter = Object.assign(Object.create(this.getAdapter()), this.getAdapter(), { url });
     payload = this.execRequestInterceptors(payload);
 
-    return adapter.request(toJsonRpc(payload), payload.getId(), payload.getMethod()).then(
-      res => this.execResponseInterceptors(responseFactory(payload, res), payload),
-      res => this.execResponseInterceptors(responseFactory(payload, res), payload)
+    return adapter.request(payload, payload.getId(), payload.getMethod()).then(
+      (res) => this.execResponseInterceptors(parseResponse(payload, res), payload),
+      (res) => this.execResponseInterceptors(parseResponse(payload, res), payload)
     );
   }
 
@@ -67,7 +66,7 @@ export default class Dispatcher {
    */
   interceptRequest(callback) {
     if (typeof callback !== 'function') {
-      throw 'Interceptor must be a function';
+      throw new TypeError('Interceptor must be a function');
     }
     this.requestInterceptors.push(callback);
 
@@ -82,14 +81,14 @@ export default class Dispatcher {
    * @return {*|Promise.<TResult>}
    */
   notifyUrl(payload, url) {
-    if (!this.getAdapter() instanceof Fetch) {
-      throw 'Only Fetch adapter supports notifyUrl method';
+    if (!(this.getAdapter() instanceof Fetch)) {
+      throw new TypeError('Only Fetch adapter supports notifyUrl method');
     }
 
     let adapter = Object.assign(Object.create(this.getAdapter()), this.getAdapter(), { url });
 
-    return adapter.notify(toJsonRpc(payload), payload.getMethod())
-      .catch(res => responseFactory(payload, res));
+    return adapter.notify(payload, payload.getMethod())
+      .catch((res) => parseResponse(payload, res));
   }
 
   /**
@@ -100,7 +99,7 @@ export default class Dispatcher {
    */
   interceptResponse(callback) {
     if (typeof callback !== 'function') {
-      throw 'Interceptor must be a function';
+      throw new TypeError('Interceptor must be a function');
     }
     this.responseInterceptors.push(callback);
 
@@ -114,7 +113,7 @@ export default class Dispatcher {
    * @return {Dispatcher}
    */
   deleteRequestInterceptor(callback) {
-    this.requestInterceptors = this.requestInterceptors.filter(el => el !== callback);
+    this.requestInterceptors = this.requestInterceptors.filter((el) => el !== callback);
 
     return this;
   }
@@ -126,7 +125,7 @@ export default class Dispatcher {
    * @return {Dispatcher}
    */
   deleteResponseInterceptor(callback) {
-    this.requestInterceptors = this.responseInterceptors.filter(el => el !== callback);
+    this.requestInterceptors = this.responseInterceptors.filter((el) => el !== callback);
 
     return this;
   }
@@ -142,7 +141,7 @@ export default class Dispatcher {
     if (!this.requestInterceptors.length) {
       return payload;
     }
-    this.requestInterceptors.forEach(callback => payload = callback(payload));
+    this.requestInterceptors.forEach((callback) => { payload = callback(payload); });
 
     return payload;
   }
@@ -159,7 +158,7 @@ export default class Dispatcher {
     if (!this.responseInterceptors.length) {
       return response;
     }
-    this.responseInterceptors.forEach(callback => response = callback(response, payload));
+    this.responseInterceptors.forEach((callback) => { response = callback(response, payload); });
 
     return response;
   }
@@ -171,7 +170,7 @@ export default class Dispatcher {
    */
   getAdapter() {
     if (!this.adapter) {
-      throw 'Adapter is not set';
+      throw new TypeError('Adapter is not set');
     }
 
     return this.adapter;

@@ -15,9 +15,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var SocketIo =
-/*#__PURE__*/
-function () {
+var SocketIo = /*#__PURE__*/function () {
   /**
    *
    * @param {io} socket
@@ -42,9 +40,9 @@ function () {
     value: function request(payload) {
       var _this = this;
 
-      var id = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : (0, _uuid.default)();
-      this.socket.emit('request', payload);
-      return new Promise(function (resolve, reject) {
+      var id = (0, _uuid.default)();
+      this.socket.emit('request', JSON.stringify(payload));
+      return new Promise(function (resolve) {
         _this.socket.on("response.".concat(id), function (data) {
           resolve(data);
         });
@@ -61,7 +59,7 @@ function () {
   }, {
     key: "notify",
     value: function notify(payload) {
-      this.socket.emit('request', payload);
+      this.socket.emit('request', JSON.stringify(payload));
       return Promise.resolve();
     }
   }]);

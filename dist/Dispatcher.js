@@ -7,9 +7,7 @@ exports.default = void 0;
 
 var _Fetch = _interopRequireDefault(require("./adapters/Fetch"));
 
-var _responseFactory = _interopRequireDefault(require("./providers/responseFactory"));
-
-var _toJsonRpc = _interopRequireDefault(require("./providers/toJsonRpc"));
+var _parseResponse = _interopRequireDefault(require("./jsonrpc/parseResponse"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -19,9 +17,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var Dispatcher =
-/*#__PURE__*/
-function () {
+var Dispatcher = /*#__PURE__*/function () {
   /**
    *
    * @param {object} adapter
@@ -47,10 +43,10 @@ function () {
       var _this = this;
 
       payload = this.execRequestInterceptors(payload);
-      return this.getAdapter().request((0, _toJsonRpc.default)(payload), payload.getId(), payload.getMethod()).then(function (res) {
-        return _this.execResponseInterceptors((0, _responseFactory.default)(payload, res), payload);
+      return this.getAdapter().request(payload).then(function (res) {
+        return _this.execResponseInterceptors((0, _parseResponse.default)(payload, res), payload);
       }, function (res) {
-        return _this.execResponseInterceptors((0, _responseFactory.default)(payload, res), payload);
+        return _this.execResponseInterceptors((0, _parseResponse.default)(payload, res), payload);
       });
     }
     /**
@@ -62,8 +58,8 @@ function () {
   }, {
     key: "notify",
     value: function notify(payload) {
-      return this.getAdapter().notify((0, _toJsonRpc.default)(payload), payload.getMethod()).catch(function (res) {
-        return (0, _responseFactory.default)(payload, res);
+      return this.getAdapter().notify(payload, payload.getMethod()).catch(function (res) {
+        return (0, _parseResponse.default)(payload, res);
       });
     }
     /**
@@ -79,18 +75,18 @@ function () {
     value: function requestUrl(payload, url) {
       var _this2 = this;
 
-      if (!this.getAdapter() instanceof _Fetch.default) {
-        throw 'Only Fetch adapter supports requestUrl method';
+      if (!(this.getAdapter() instanceof _Fetch.default)) {
+        throw new TypeError('Only Fetch adapter supports requestUrl method');
       }
 
       var adapter = Object.assign(Object.create(this.getAdapter()), this.getAdapter(), {
         url: url
       });
       payload = this.execRequestInterceptors(payload);
-      return adapter.request((0, _toJsonRpc.default)(payload), payload.getId(), payload.getMethod()).then(function (res) {
-        return _this2.execResponseInterceptors((0, _responseFactory.default)(payload, res), payload);
+      return adapter.request(payload, payload.getId(), payload.getMethod()).then(function (res) {
+        return _this2.execResponseInterceptors((0, _parseResponse.default)(payload, res), payload);
       }, function (res) {
-        return _this2.execResponseInterceptors((0, _responseFactory.default)(payload, res), payload);
+        return _this2.execResponseInterceptors((0, _parseResponse.default)(payload, res), payload);
       });
     }
     /**
@@ -104,7 +100,7 @@ function () {
     key: "interceptRequest",
     value: function interceptRequest(callback) {
       if (typeof callback !== 'function') {
-        throw 'Interceptor must be a function';
+        throw new TypeError('Interceptor must be a function');
       }
 
       this.requestInterceptors.push(callback);
@@ -121,15 +117,15 @@ function () {
   }, {
     key: "notifyUrl",
     value: function notifyUrl(payload, url) {
-      if (!this.getAdapter() instanceof _Fetch.default) {
-        throw 'Only Fetch adapter supports notifyUrl method';
+      if (!(this.getAdapter() instanceof _Fetch.default)) {
+        throw new TypeError('Only Fetch adapter supports notifyUrl method');
       }
 
       var adapter = Object.assign(Object.create(this.getAdapter()), this.getAdapter(), {
         url: url
       });
-      return adapter.notify((0, _toJsonRpc.default)(payload), payload.getMethod()).catch(function (res) {
-        return (0, _responseFactory.default)(payload, res);
+      return adapter.notify(payload, payload.getMethod()).catch(function (res) {
+        return (0, _parseResponse.default)(payload, res);
       });
     }
     /**
@@ -143,7 +139,7 @@ function () {
     key: "interceptResponse",
     value: function interceptResponse(callback) {
       if (typeof callback !== 'function') {
-        throw 'Interceptor must be a function';
+        throw new TypeError('Interceptor must be a function');
       }
 
       this.responseInterceptors.push(callback);
@@ -195,7 +191,7 @@ function () {
       }
 
       this.requestInterceptors.forEach(function (callback) {
-        return payload = callback(payload);
+        payload = callback(payload);
       });
       return payload;
     }
@@ -216,7 +212,7 @@ function () {
       }
 
       this.responseInterceptors.forEach(function (callback) {
-        return response = callback(response, payload);
+        response = callback(response, payload);
       });
       return response;
     }
@@ -230,7 +226,7 @@ function () {
     key: "getAdapter",
     value: function getAdapter() {
       if (!this.adapter) {
-        throw 'Adapter is not set';
+        throw new TypeError('Adapter is not set');
       }
 
       return this.adapter;
