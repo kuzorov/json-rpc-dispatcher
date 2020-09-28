@@ -64,7 +64,7 @@ var JsonRpcError = /*#__PURE__*/function (_Error) {
       return new JsonRpcError({
         id: id,
         error: {
-          message: 'Invalid request',
+          message: 'Method not found',
           code: -32601,
           data: data
         }
@@ -78,7 +78,7 @@ var JsonRpcError = /*#__PURE__*/function (_Error) {
       return new JsonRpcError({
         id: id,
         error: {
-          message: 'Invalid request',
+          message: 'Invalid params',
           code: -32602,
           data: data
         }
@@ -92,7 +92,7 @@ var JsonRpcError = /*#__PURE__*/function (_Error) {
       return new JsonRpcError({
         id: id,
         error: {
-          message: 'Invalid request',
+          message: 'Internal error',
           code: -32603,
           data: data
         }
@@ -106,7 +106,7 @@ var JsonRpcError = /*#__PURE__*/function (_Error) {
       return new JsonRpcError({
         id: id,
         error: {
-          message: 'Invalid request',
+          message: 'Parse error',
           code: -32700,
           data: data
         }
